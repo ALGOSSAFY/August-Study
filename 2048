@@ -1,0 +1,132 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int N;
+int MAP[20][20];
+int ans = 0;
+int idx, temp;
+
+void move(int dir) {
+    if (dir == 0) {
+        for (int i = 0; i < N; i++) {
+            idx = 0;
+            for (int j = 1; j < N; j++) {
+                if (MAP[j][i]) {
+                    temp = MAP[j][i];
+                    MAP[j][i] = 0;
+                    if (MAP[idx][i] == 0) {
+                        MAP[idx][i] = temp;
+                    }
+                    else if (MAP[idx][i] == temp) {
+                        MAP[idx][i] = temp * 2;
+                        idx++;
+                    }
+                    else {
+                        idx++;
+                        MAP[idx][i] = temp;
+                    }
+                }
+            }
+        }
+    }
+    else if (dir == 1) {
+        for (int i = 0; i < N; i++) {
+            idx = N-1;
+            for (int j = N-2; j >= 0; j--) {
+                if (MAP[j][i]) {
+                    temp = MAP[j][i];
+                    MAP[j][i] = 0;
+                    if (MAP[idx][i] == 0) {
+                        MAP[idx][i] = temp;
+                    }
+                    else if (MAP[idx][i] == temp) {
+                        MAP[idx][i] = temp * 2;
+                        idx--;
+                    }
+                    else {
+                        idx--;
+                        MAP[idx][i] = temp;
+                    }
+                }
+            }
+        }
+    }
+    else if (dir == 2) {
+        for (int j = 0; j < N; j++) {
+            idx = 0;
+            for (int i = 1; i < N; i++) {
+                if (MAP[j][i]) {
+                    temp = MAP[j][i];
+                    MAP[j][i] = 0;
+                    if (MAP[j][idx] == 0) {
+                        MAP[j][idx] = temp;
+                    }
+                    else if (MAP[j][idx] == temp) {
+                        MAP[j][idx] = temp * 2;
+                        idx++;
+                    }
+                    else {
+                        idx++;
+                        MAP[j][idx] = temp;
+                    }
+                }
+            }
+        }
+    }
+    else {
+        for (int j = 0; j < N; j++) {
+            idx = N-1;
+            for (int i = N-2; i >= 0; i--) {
+                if (MAP[j][i]) {
+                    temp = MAP[j][i];
+                    MAP[j][i] = 0;
+                    if (MAP[j][idx] == 0) {
+                        MAP[j][idx] = temp;
+                    }
+                    else if (MAP[j][idx] == temp) {
+                        MAP[j][idx] = temp * 2;
+                        idx--;
+                    }
+                    else {
+                        idx--;
+                        MAP[j][idx] = temp;
+                    }
+                }
+            }
+        }
+    }
+}
+
+void dfs(int move_cnt) {
+    if (move_cnt == 5) {
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                if (MAP[i][j] > ans) {
+                    ans = MAP[i][j];
+                }
+            }
+        }
+        return;
+    }
+
+    int temp_MAP[20][20];
+    copy(&MAP[0][0], &MAP[0][0] + 20 * 20, &temp_MAP[0][0]);
+
+    for (int m = 0; m < 4; m++) {
+        move(m);
+        dfs(move_cnt + 1);
+        copy(&temp_MAP[0][0], &temp_MAP[0][0] + 20 * 20, &MAP[0][0]);
+    }
+}
+
+int main() {
+    cin >> N;
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
+            cin >> MAP[i][j];
+        }
+    }
+    dfs(0);
+    cout << ans;
+}
