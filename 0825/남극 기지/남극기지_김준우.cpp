@@ -45,8 +45,7 @@ double dist(node a, node b){
 
 bool cmp(edge a, edge b) {
 	if (a.d < b.d) return true;
-	if (a.d > b.d) return false;
-
+	
 	return false;
 }
 
@@ -90,8 +89,7 @@ int main(){
 		    parent[i] = i;
 
         for (int i = 0; i < v.size(); i++)
-            for (int j = 0; j < v.size(); j++) {
-                if (i == j) continue;
+            for (int j = i+1; j < v.size(); j++) {
 
                 node now = v[i];
                 node next = v[j];
